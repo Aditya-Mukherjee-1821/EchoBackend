@@ -14,13 +14,13 @@ import {
   NEW_MESSAGE_ALERT,
   REFETCH_CHATS,
   TYPING,
+  NEW_REQUEST
 } from './constants/events.constants.js';
 import { v4 as uuidv4 } from 'uuid';
 import { Message } from './models/message.model.js';
 import cors from 'cors';
 import { socketAuthenticator } from './middlewares/auth.middleware.js';
 import { Chat } from './models/chat.models.js';
-import { NEW_REQUEST } from '../client/src/constants/events.js';
 
 const app = express();
 // create io connection
