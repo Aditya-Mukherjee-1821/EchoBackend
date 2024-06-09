@@ -10,6 +10,7 @@ import {
   signup,
   getNotifications,
   sendMessage,
+  getToken,
 } from '../controllers/user.controllers.js';
 import { isUserAuthenticated } from '../middlewares/auth.middleware.js';
 
@@ -17,6 +18,8 @@ const app = express.Router();
 
 app.post('/signUp', signup);
 app.post('/login', login);
+
+app.get('/token', getToken);
 
 app.use(isUserAuthenticated);
 

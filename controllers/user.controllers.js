@@ -46,6 +46,15 @@ const login = async (req, res, next) => {
   }
 };
 
+const getToken = (req, res, next) => {
+  // console.log(req.cookies['EchoToken']);
+  const response = {
+    success: req.cookies['EchoToken'] ? true : false,
+    token: req.cookies['EchoToken'] ? req.cookies['EchoToken'] : '',
+  };
+  res.status(200).send(response);
+};
+
 const getMyChats = async (req, res, next) => {
   try {
     const chats = await Chat.find({ members: req.user_id }).populate(
@@ -244,6 +253,7 @@ const logout = (req, res) => {
 export {
   login,
   signup,
+  getToken,
   getMyChats,
   logout,
   getMyMessages,

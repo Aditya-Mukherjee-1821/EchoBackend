@@ -21,6 +21,7 @@ const sendToken = (res, user, status, message) => {
     maxAge: 15 * 86400000,
     sameSite: 'none',
     secure: true,
+    httpOnly: true,
   };
   const token = jwt.sign({ _id: user._id }, secretKey);
 
@@ -36,6 +37,7 @@ const deleteToken = (res, status, message) => {
     maxAge: 0,
     sameSite: 'none',
     secure: true,
+    httpOnly: true,
   };
 
   return res.status(status).cookie('EchoToken', '', cookieOptions).json({
@@ -50,8 +52,11 @@ const emitEvent = (req, event, members, data) => {
 };
 
 const getSocket = (users = []) => {
-  const sockets = users.map((user) => userSocketIdMap.get(user._id.toString())?userSocketIdMap.get(user._id.toString()):null);
-
+  const sockets = users.map((user) =>
+    userSocketIdMap.get(user._id.toString())
+      ? userSocketIdMap.get(user._id.toString())
+      : null
+  );
 
   return sockets;
 };
