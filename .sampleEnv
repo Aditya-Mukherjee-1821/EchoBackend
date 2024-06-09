@@ -1,0 +1,5 @@
+MONGO_URI = mongodb://localhost:27017/
+
+SECRET_KEY = N0nP4rtT1m3K3yG3nT0k3n
+
+CLIENT_URL = client url
