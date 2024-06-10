@@ -13,8 +13,9 @@ import {
   NEW_MESSAGE,
   NEW_MESSAGE_ALERT,
   REFETCH_CHATS,
-  TYPING,
-  NEW_REQUEST
+  NEW_REQUEST,
+  IS_TYPING,
+  IS_NOT_TYPING,
 } from './constants/events.constants.js';
 import { v4 as uuidv4 } from 'uuid';
 import { Message } from './models/message.model.js';
@@ -81,7 +82,47 @@ io.on('connection', (socket) => {
   //emit all the current updated list of users that are active to the particular socket that got connected now
   io.emit(IS_ONLINE, Array.from(userSocketIdMap?.keys()));
 
-  console.log(Array.from(userSocketIdMap.keys()));
+  console.log(userSocketIdMap);
+
+  socket.on(IS_TYPING, ({ chat_id, user_id, members }) => {
+    //emit the other member that user_id is typing
+    // filter out user_id from members
+    const otherMember = members.filter(({ _id, name }) => _id !== user_id);
+    const otherMemberSocket = getSocket(otherMember);
+    console.log(otherMemberSocket);
+    if (otherMemberSocket) {
+      console.log(
+        'Emitting to ',
+        otherMember[0]._id,
+        ' that ',
+        user_id,
+        ' is typing'
+      );
+      io.to(otherMemberSocket).emit(IS_TYPING, { chat_id, user_id, members });
+    }
+  });
+
+  socket.on(IS_NOT_TYPING, ({ chat_id, user_id, members }) => {
+    //emit the other member that user_id is typing
+    // filter out user_id from members
+    const otherMember = members.filter(({ _id, name }) => _id !== user_id);
+    const otherMemberSocket = getSocket(otherMember);
+    console.log(otherMemberSocket)
+    if (otherMemberSocket) {
+      console.log(
+        'Emitting to ',
+        otherMember[0]._id,
+        ' that ',
+        user_id,
+        ' is not typing'
+      );
+      io.to(otherMemberSocket).emit(IS_NOT_TYPING, {
+        chat_id,
+        user_id,
+        members,
+      });
+    }
+  });
 
   socket.on(NEW_MESSAGE, async ({ chat_id, members, content }) => {
     const messageForRealtime = {
@@ -106,7 +147,7 @@ io.on('connection', (socket) => {
     // filter out all null values from memberSockets
     const filteredSockets = memberSockets.filter((item) => item != null);
     // console.log(filteredSockets);
-    io.to(filteredSockets).emit(NEW_MESSAGE, messageForRealtime);
+    io.to(filteredSockets).emit(NEW_MESSAGE, { messageForRealtime, chat_id });
     io.to(filteredSockets).emit(NEW_MESSAGE_ALERT, { chat: chat_id });
     try {
       await Message.create(messageForDB);

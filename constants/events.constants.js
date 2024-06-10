@@ -5,7 +5,8 @@ const REFETCH_CHATS = 'REFETCH_CHATS';
 const IS_ONLINE = 'IS_ONLINE';
 const ACCEPTED = 'ACCEPTED';
 const CHAT_OPENED = 'CHAT_OPENED';
-const TYPING = 'TYPING';
+const IS_TYPING = 'IS_TYPING';
+const IS_NOT_TYPING = 'IS_NOT_TYPING';
 
 export {
   NEW_MESSAGE,
@@ -15,5 +16,6 @@ export {
   IS_ONLINE,
   ACCEPTED,
   CHAT_OPENED,
-  TYPING,
+  IS_TYPING,
+  IS_NOT_TYPING
 };
